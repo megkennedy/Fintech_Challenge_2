@@ -102,15 +102,21 @@ def find_qualifying_loans(bank_data, credit_score, debt, income, loan, home_valu
 
     return bank_data_filtered
 
-def save_csv(find_qualifying_loans):    
-    header=["Lender", "Max Loan Amount", "Max LTV", "Max DTI","Min Credit Score", "Interest Rate"]
-    csvpath=Path("qualifying_loans.csv")
 
+def save_csv(qualifying_loans):  
+
+    #set my header values
+    header=["Lender", "Max Loan Amount", "Max LTV", "Max DTI","Min Credit Score", "Interest Rate"]
+    
+    #name my csv file
+    csvpath=Path("qualifying_loans.csv")
+    
+    #write my csv file
     with open(csvpath, 'w') as csvfile:
         csvwriter= csv.writer(csvfile, delimiter=",")
         csvwriter.writerow(header)
-        for row in save_csv:
-            csvwriter.writerow(row.values())
+        for row in qualifying_loans:
+            csvwriter.writerow(row)
 
 
 def save_qualifying_loans(qualifying_loans):
@@ -120,13 +126,19 @@ def save_qualifying_loans(qualifying_loans):
         qualifying_loans (list of lists): The qualifying bank loans.
     """
     # @TODO: Complete the usability dialog for savings the CSV Files.
+
+    #If there are no qualifying loans return this message:
     if len(qualifying_loans) == 0:
         sys.exit(f"Sorry, you do not qualify for a loan today")
+
+    #If there are qualifying loans see if the use wants a list printed    
     else:
         action = questionary.select("Would you like to save qualifying loans to a csv file?", choices=
             ["yes","no"]).ask()
         if action=="no":
             sys.exit("Thank you, have a good day!")
+        else:
+            save_csv(qualifying_loans)
         
 
     
